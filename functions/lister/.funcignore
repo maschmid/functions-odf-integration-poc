@@ -1,0 +1,10 @@
+# Use the .funcignore file to exclude files from the image build.
+# Excluded files do not affect the rebuild fingerprint.
+#
+# Supported patterns:
+#   foo        - exclude any file or directory named "foo" at any depth
+#   *.tmp      - glob; exclude matching files at any depth (except S2I: root only)
+#   /docs      - root-relative; exclude only the top-level "docs" entry
+#   build/     - trailing slash stripped, then matched as a basename
+#
+# Lines starting with # are comments and are ignored.

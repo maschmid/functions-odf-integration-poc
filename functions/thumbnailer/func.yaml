@@ -1,0 +1,36 @@
+# $schema: https://raw.githubusercontent.com/knative/func/release-1.22/schema/func_yaml-schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/knative/func/release-1.22/schema/func_yaml-schema.json
+specVersion: 0.36.0
+name: thumbnailer
+runtime: python
+registry: image-registry.openshift-image-registry.svc:5000/foobar
+namespace: foobar
+created: 2026-06-17T15:45:13.606646728+02:00
+build:
+  builder: pack
+run:
+  envs:
+  - name: INPUT_BUCKET_HOST
+    value: '{{ configMap:foo-bucket:BUCKET_HOST }}'
+  - name: INPUT_BUCKET_PORT
+    value: '{{ configMap:foo-bucket:BUCKET_PORT }}'
+  - name: INPUT_BUCKET_NAME
+    value: '{{ configMap:foo-bucket:BUCKET_NAME }}'
+  - name: INPUT_BUCKET_ACCESS_KEY_ID
+    value: '{{ secret:foo-bucket:AWS_ACCESS_KEY_ID }}'
+  - name: INPUT_BUCKET_SECRET_ACCESS_KEY
+    value: '{{ secret:foo-bucket:AWS_SECRET_ACCESS_KEY }}'
+  - name: OUTPUT_BUCKET_HOST
+    value: '{{ configMap:foo-bucket-resized:BUCKET_HOST }}'
+  - name: OUTPUT_BUCKET_PORT
+    value: '{{ configMap:foo-bucket-resized:BUCKET_PORT }}'
+  - name: OUTPUT_BUCKET_NAME
+    value: '{{ configMap:foo-bucket-resized:BUCKET_NAME }}'
+  - name: OUTPUT_BUCKET_ACCESS_KEY_ID
+    value: '{{ secret:foo-bucket-resized:AWS_ACCESS_KEY_ID }}'
+  - name: OUTPUT_BUCKET_SECRET_ACCESS_KEY
+    value: '{{ secret:foo-bucket-resized:AWS_SECRET_ACCESS_KEY }}'
+deploy:
+  namespace: foobar
+  image: image-registry.openshift-image-registry.svc:5000/foobar/thumbnailer@sha256:f71bc16865243652ff7f7e81b6d12d7fb37106c2036acc55c14b605e09bc84a9
+  deployer: raw

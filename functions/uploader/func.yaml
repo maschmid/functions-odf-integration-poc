@@ -1,0 +1,26 @@
+# $schema: https://raw.githubusercontent.com/knative/func/release-1.22/schema/func_yaml-schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/knative/func/release-1.22/schema/func_yaml-schema.json
+specVersion: 0.36.0
+name: uploader
+runtime: python
+registry: image-registry.openshift-image-registry.svc:5000/foobar
+namespace: foobar
+created: 2026-06-16T11:56:57.950269627+02:00
+build:
+  builder: pack
+run:
+  envs:
+  - name: BUCKET_HOST
+    value: '{{ configMap:foo-bucket:BUCKET_HOST }}'
+  - name: BUCKET_PORT
+    value: '{{ configMap:foo-bucket:BUCKET_PORT }}'
+  - name: BUCKET_NAME
+    value: '{{ configMap:foo-bucket:BUCKET_NAME }}'
+  - name: AWS_ACCESS_KEY_ID
+    value: '{{ secret:foo-bucket:AWS_ACCESS_KEY_ID }}'
+  - name: AWS_SECRET_ACCESS_KEY
+    value: '{{ secret:foo-bucket:AWS_SECRET_ACCESS_KEY }}'
+deploy:
+  namespace: foobar
+  image: image-registry.openshift-image-registry.svc:5000/foobar/uploader@sha256:c9a62c6a8d918fafd11bd53ab99c8bbb5bc7c6f800b7f0fab32fad475b6af10e
+  deployer: raw
