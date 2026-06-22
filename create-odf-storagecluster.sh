@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -Eeuxo pipefail
+
 function create_odf_storagecluster() {
   oc create -f - <<EOF
 apiVersion: ocs.openshift.io/v1
@@ -43,7 +45,7 @@ spec:
         - ReadWriteOnce
         resources:
           requests:
-            storage: 512Gi
+            storage: 128Gi
         storageClassName: gp3-csi
         volumeMode: Block
       status: {}
@@ -58,3 +60,5 @@ EOF
 }
 
 create_odf_storagecluster
+oc wait --for=jsonpath='{.status.phase}'=Ready storagecluster ocs-storagecluster -n openshift-storage --timeout=30m
+

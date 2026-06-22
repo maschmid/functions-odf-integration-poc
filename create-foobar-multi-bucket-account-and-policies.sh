@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -Eeuxo pipefail
+
 function create_account() {
   local account
 

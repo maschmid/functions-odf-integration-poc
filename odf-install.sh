@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -Eeuxo pipefail
+
 subscribe_odf() {
   oc create -f - <<EOF
 apiVersion: v1
@@ -65,10 +67,12 @@ wait_for_csv() {
 }
 
 function enable_odf_console_plugin() {
-  oc wait --for=condition=create consoleplugin odf-console
+  oc wait --for=create consoleplugin odf-console --timeout=20m
   oc patch console.operator.openshift.io cluster --type json -p='[{"op":"add","path":"/spec/plugins/-","value":"odf-console"}]'
 }
 
 subscribe_odf
 wait_for_csv openshift-storage odf-operator
 enable_odf_console_plugin
+
+

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -Eeuxo pipefail
+
 namespace=foobar
 
 function create_namespace() {
@@ -25,3 +27,5 @@ create_namespace
 create_obc "foo-bucket"
 create_obc "foo-bucket-resized"
 
+oc wait --for=jsonpath='{.status.phase}'=Bound obc foo-bucket -n foobar --timeout=5m
+oc wait --for=jsonpath='{.status.phase}'=Bound obc foo-bucket-resized -n foobar --timeout=5m
